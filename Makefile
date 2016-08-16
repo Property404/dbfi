@@ -7,16 +7,16 @@ SRC_DIR = ./src/
 # For Windows/ReactOS:
 #	Change INSTALL_DIR to C:\windows\sytem32\
 #	Change INSTALL_COMMAND to move
-#	Change EXECUTABLE_NAME to hdbf.exe
+#	Change EXECUTABLE_NAME to bf.exe
 INSTALL_DIR = /usr/local/bin/
 INSTALL_COMMAND = install
-EXECUTABLE_NAME = hdbf
+EXECUTABLE_NAME = bf
 
 # Compiler flags
 CC = cc # More portable than using 'gcc,' but with risk
 	# of calling wrong compiler
-CFLAGS = -Wall -Wextra -pedantic -O2 -ansi
-FILES = optimize.c binarytree.c hdbf.c main.c
+CFLAGS = -Wall -Wextra -std=c90
+FILES = optimize.c interpret.c main.c
 SOURCES = $(FILES:%.c=$(SRC_DIR)/%.c)
 
 # Build recipe

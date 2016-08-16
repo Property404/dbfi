@@ -1,5 +1,5 @@
 /*
-hdbf - Hyper-Dimensional Brainfuck interpreter
+Dagan's Brainfuck Interpreter
 Copyright (C) 2016 Dagan Martinez
 
 This program is free software: you can redistribute it and/or modify
@@ -16,14 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "hdbf.h"
+#include "interpret.h"
 #include "optimize.h"
 #include "options.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define HDBF_VERSION "hdbf 1.3 (nonrelease-commit7)"
-#define HDBF_USAGE "Usage: hdbf [options] [filename | -i cmd]\n"
+#define DBFI_VERSION "Dagan's Brainfuck Interpreter 0.0.1"
+#define DBFI_USAGE "Usage: bf [options] [filename | -i cmd]\n"
 
 int main(int argc, char *argv[])
 {
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 	/* Parse arguments */
 	if (argc <= 1) {
 		/* No arguments */
-		fprintf(stderr, "hdbf: no arguments\n" HDBF_USAGE);
+		fprintf(stderr, "bf: no arguments\n" DBFI_USAGE);
 		return EXIT_FAILURE;
 	} else {
 		int i, j;
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 						} else {
 							/* Option is invalid, abort */
 							fprintf(stderr,
-								"hdbf: no option `%c`\n",
+								"bf: no option `%c`\n",
 								argv[i]
 								[j]);
 							return
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 		}
 	}
 	if (HAS_OPTION(OPT_HELP)) {
-		printf(HDBF_USAGE "\n"
+		printf(DBFI_USAGE "\n"
 		       "Options:\n"
 		       "\t-b\tRun regular Brainfuck\n"
 		       "\t-d\tAllow debugging commands\n"
@@ -102,16 +102,16 @@ int main(int argc, char *argv[])
 		       "\t-v\tDisplay version number\n");
 	} else if (HAS_OPTION(OPT_VER)) {
 		/* Print out version number */
-		printf(HDBF_VERSION "\n");
+		printf(DBFI_VERSION "\n");
 	} else if (HAS_OPTION(OPT_STRING)) {
 		/* Interpret from argument */
 		if (filename_set) {
 			if (HAS_OPTION(OPT_OPTIMIZE)) {
 				optimize(filename, options);
 			}
-			run(filename, options);
+			interpret(filename, options);
 		} else {
-			fprintf(stderr, "hdbf: no command\n" HDBF_USAGE);
+			fprintf(stderr, "bf: no command\n" DBFI_USAGE);
 			return EXIT_FAILURE;
 		}
 	} else if (filename_set) {
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
 		/* Check for errors */
 		if (fp == NULL) {
 			fprintf(stderr,
-				"hdbf: file \"%s\" not found\n", filename);
+				"bf: file \"%s\" not found\n", filename);
 			free(filename);
 			return EXIT_FAILURE;
 		}
@@ -141,11 +141,11 @@ int main(int argc, char *argv[])
 		if (HAS_OPTION(OPT_OPTIMIZE)) {
 			optimize(fp_contents, options);
 		}
-		run(fp_contents, options);
+		interpret(fp_contents, options);
 		/* Free everything */
 		free(fp_contents);
 	} else {
-		fprintf(stderr, "hdbf: no input files\n" HDBF_USAGE);
+		fprintf(stderr, "bf: no input files\n" DBFI_USAGE);
 		return EXIT_FAILURE;
 	}
 
