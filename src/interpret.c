@@ -6,7 +6,7 @@
 
 void interpret(const char *code, int options)
 {
-	int tape_size = 1;	/* *Current* length of tape */
+	int tape_size = 30;	/* *Current* length of tape */
 	char *tape = calloc(tape_size, sizeof(char));
 	int pointer = 0;
 
@@ -20,7 +20,6 @@ void interpret(const char *code, int options)
 	int temp;
 
 	/* options */
-	int options;
 	SET_OPTIONS_VARIABLE(options);
 
 

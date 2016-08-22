@@ -20,7 +20,7 @@ FILES = optimize.c interpret.c main.c
 SOURCES = $(FILES:%.c=$(SRC_DIR)/%.c)
 
 # Build recipe
-hdbf:
+bf:
 	$(CC) -o $(EXECUTABLE_NAME) $(SOURCES) $(CFLAGS)
 clean:
 	rm -f $(EXECUTABLE_NAME)
