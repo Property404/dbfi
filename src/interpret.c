@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,9 +7,9 @@
 
 void interpret(const char *code, int options)
 {
-	int tape_size = 30;	/* *Current* length of tape */
+	int tape_size = 50;	/* *Current* length of tape */
 	char *tape = calloc(tape_size, sizeof(char));
-	int pointer = 0;
+	int pointer = 25;
 
 	/* List of loop positions */
 	int *loop_queue = malloc(0);
@@ -36,6 +37,7 @@ void interpret(const char *code, int options)
 				printf("]\n");
 				break;
 				}
+			break;
 			/* Sum up all pluses and add to cell */
 		case '+':
 			tape[pointer]++;
@@ -49,19 +51,19 @@ void interpret(const char *code, int options)
 				tape[pointer]--;
 			}
 			break;
+		case ',':
+			tape[pointer] = getchar();
+			break;
 		case '>':
-			temp = pointer;
 			pointer++;
-
-			if (pointer >= tape_size) {
-				char *buffer;
-				buffer =
-				    calloc((pointer + 1), sizeof(char));
-				for (j = 0; j < temp; j++) {
+			if(pointer>=tape_size){
+				char* buffer = calloc ((tape_size+1),sizeof(char));
+				for(j=0;j<tape_size;j++){
 					buffer[j] = tape[j];
 				}
 				free(tape);
 				tape = buffer;
+				tape_size++;
 			}
 			break;
 		case '<':
