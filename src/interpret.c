@@ -7,9 +7,9 @@
 
 void interpret(const char *code, int options)
 {
-	int tape_size = 50;	/* *Current* length of tape */
+	int tape_size = 5;	/* *Current* length of tape */
 	char *tape = calloc(tape_size, sizeof(char));
-	int pointer = 25;
+	int pointer = 0;
 
 	/* List of loop positions */
 	int *loop_queue = malloc(0);
@@ -55,15 +55,22 @@ void interpret(const char *code, int options)
 			tape[pointer] = getchar();
 			break;
 		case '>':
+			temp = tape_size;
 			pointer++;
-			if(pointer>=tape_size){
-				char* buffer = calloc ((tape_size+1),sizeof(char));
-				for(j=0;j<tape_size;j++){
+			while (code[i + 1] == '>') {
+				pointer++;
+				i++;
+			}
+			/* Push to end of tape */
+			if (pointer >= tape_size) {
+				char *buffer =
+				    calloc((pointer + 1), sizeof(char));
+				for (j = 0; j < tape_size; j++) {
 					buffer[j] = tape[j];
 				}
 				free(tape);
 				tape = buffer;
-				tape_size++;
+				tape_size += pointer - temp + 1;
 			}
 			break;
 		case '<':
