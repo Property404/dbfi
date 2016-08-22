@@ -3,10 +3,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define OPPOSITE(n) (n=='+'?'-':n=='-'?'+':n=='<'?'>':n=='>'?'<':\
-					n=='^'?'V':n=='V'?'^':0)
+#define OPPOSITE(n) (n=='+'?'-':n=='-'?'+':n=='<'?'>':n=='>'?'<':0)
 #define VALID_CHAR(n) (n=='+'||n=='-'||n=='<'||n=='>'||n=='['||n==']'\
-						|| n=='^' || n=='V' || n==',' || n=='.' || (HAS_OPTION(OPT_DEBUG) && (n=='#' || n=='?')))
+						|| n==',' || n=='.' || (HAS_OPTION(OPT_DEBUG) && (n=='#' || n=='?')))
 
 void optimize(char *code, int options)
 {

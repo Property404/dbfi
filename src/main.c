@@ -94,7 +94,6 @@ int main(int argc, char *argv[])
 	if (HAS_OPTION(OPT_HELP)) {
 		printf(DBFI_USAGE "\n"
 		       "Options:\n"
-		       "\t-b\tRun regular Brainfuck\n"
 		       "\t-d\tAllow debugging commands\n"
 		       "\t-h\tPrint help message\n"
 		       "\t-i cmd\tPass string as code\n"
@@ -154,4 +153,3 @@ int main(int argc, char *argv[])
 		free(filename);
 	return EXIT_SUCCESS;
 }
-
