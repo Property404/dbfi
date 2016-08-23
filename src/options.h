@@ -22,7 +22,7 @@
 #define OPT_VER (1<<2)		/* Show version number */
 #define OPT_DEBUG (1<<3)	/* Allow debug commands */
 #define OPT_STRING (1<<4)	/* Lets argument string run as code instead of file */
-
+#define OPT_TIMER (1<<5)	/* Displays the run time of a program */
 
 	/* Get option from option code */
 #define GET_OPTION(n) (\
@@ -31,5 +31,6 @@
 	n=='v'?OPT_VER:\
 	n=='d'?OPT_DEBUG:\
 	n=='i'?OPT_STRING:\
+	n=='t'?OPT_TIMER:\
 	OPT_NONE)
 #endif

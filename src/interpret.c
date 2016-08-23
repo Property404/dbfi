@@ -1,14 +1,14 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "interpret.h"
 #include "options.h"
+#include "timer.h"
 
 void interpret(const char *code, int options)
 {
 	int tape_size = 5;	/* *Current* length of tape */
-	char *tape = calloc(tape_size, sizeof(char));
+	unsigned char *tape = calloc(tape_size, sizeof(unsigned char));
 	int pointer = 0;
 
 	/* List of loop positions */
@@ -20,9 +20,11 @@ void interpret(const char *code, int options)
 	int j;
 	int temp;
 
+	/* Timer variables */
+	START_TIMER;
+
 	/* options */
 	SET_OPTIONS_VARIABLE(options);
-
 
 	for (i = 0; code[i] != '\0'; i++) {
 		switch (code[i]) {
@@ -63,8 +65,9 @@ void interpret(const char *code, int options)
 			}
 			/* Push to end of tape */
 			if (pointer >= tape_size) {
-				char *buffer =
-				    calloc((pointer + 1), sizeof(char));
+				unsigned char *buffer =
+				    calloc((pointer + 1),
+					   sizeof(unsigned char));
 				for (j = 0; j < tape_size; j++) {
 					buffer[j] = tape[j];
 				}
@@ -126,4 +129,10 @@ void interpret(const char *code, int options)
 			break;
 		}
 	}
+
+	if (HAS_OPTION(OPT_TIMER)) {
+		STOP_TIMER;
+		PRINT_TIMER;
+	}
+	return;
 }
