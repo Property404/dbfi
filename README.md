@@ -3,8 +3,8 @@ DBFI is a normal Brainfuck interpreter bassed off the [Hyper-Dimensional Brainfu
 
 ## Command line options:
 `-d`	Allow debugging commands (`#`)  
-`-h` or `--help`	Print help message
-`-i cmd`	Pass argument as code instead of filename
+`-h` or `--help`	Print help message  
+`-i cmd`	Pass argument as code instead of filename  
 `-o`	Optimize code before running  
 `-t`	Display run time of program  
 `-v`	Display DBFI version number
