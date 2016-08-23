@@ -1,5 +1,5 @@
 # Dagan's Brainfuck Interpreter
-DBFI is a normal Brainfuck interpreter bassed off the [Hyper-Dimensional Brainfuck](https://github.com/Property404/hdbf) interpreter(hdbf). I use to use hdbf for all my brainfucking needs, but I felt the need to have a normal implementation.
+DBFI is a normal Brainfuck interpreter based off the [Hyper-Dimensional Brainfuck](https://github.com/Property404/hdbf) interpreter(hdbf). I used to use hdbf for all my brainfucking needs, but I felt the need to have a normal implementation.
 
 ## Command line options:
 `-d`	Allow debugging commands (`#`)  
