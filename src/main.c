@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define DBFI_VERSION "Dagan's Brainfuck Interpreter 0.0.6"
+#define DBFI_VERSION "Dagan's Brainfuck Interpreter 0.0.7"
 #define DBFI_USAGE "Usage: bf [options] [filename | -i cmd]\n"
 
 int main(int argc, char *argv[])
