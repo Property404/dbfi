@@ -112,7 +112,7 @@ void interpret(const char *code, int options)
 			} else {
 				/* Go to end of loop */
 				int x = 0;
-				while (code[i + 1] != '\0') {
+				while ( /*code[i + 1] != '\0' */ 1) {
 
 					if (code[i] == '[') {
 						x++;
