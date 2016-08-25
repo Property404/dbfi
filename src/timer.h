@@ -20,7 +20,7 @@
 #define START_TIMER struct timespec KTIMER_start, KTIMER_stop;\
 		clock_gettime(CLOCK_MONOTONIC_RAW, &KTIMER_start);
 #define STOP_TIMER clock_gettime(CLOCK_MONOTONIC_RAW, &KTIMER_stop);
-#define PRINT_TIMER printf("runtime: %ld.%09ld\n", (KTIMER_stop.tv_sec-KTIMER_start.tv_sec),(KTIMER_stop.tv_nsec - KTIMER_start.tv_nsec));
+#define PRINT_TIMER printf("runtime: %lf\n", (KTIMER_stop.tv_sec-KTIMER_start.tv_sec)+(KTIMER_stop.tv_nsec - KTIMER_start.tv_nsec)/1E9);
 #else
 /* Using whole seconds */
 #define START_TIMER time_t KTIMER_start = time(NULL);time_t KTIMER_stop;

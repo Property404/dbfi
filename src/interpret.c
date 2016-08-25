@@ -20,11 +20,11 @@ void interpret(const char *code, int options)
 	int j;
 	int temp;
 
-	/* Timer variables */
-	START_TIMER;
-
 	/* options */
 	SET_OPTIONS_VARIABLE(options);
+
+	/* Timer variables */
+	START_TIMER;
 
 	for (i = 0; code[i] != '\0'; i++) {
 		switch (code[i]) {
@@ -112,7 +112,7 @@ void interpret(const char *code, int options)
 			} else {
 				/* Go to end of loop */
 				int x = 0;
-				while ( /*code[i + 1] != '\0' */ 1) {
+				while (1) {
 
 					if (code[i] == '[') {
 						x++;
