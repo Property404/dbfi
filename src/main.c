@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "interpret.h"
 #include "optimize.h"
 #include "options.h"
+#include "compile.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -109,7 +110,7 @@ int main(int argc, char *argv[])
 			if (HAS_OPTION(OPT_OPTIMIZE)) {
 				optimize(filename, options);
 			}
-			interpret(filename, options);
+			run(filename, options);
 		} else {
 			fprintf(stderr, "bf: no command\n" DBFI_USAGE);
 			return EXIT_FAILURE;
