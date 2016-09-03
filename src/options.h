@@ -17,7 +17,6 @@
 	/* List of possible options 
 	   Values are by powers of 2 */
 #define OPT_NONE (0)		/* Empty option */
-#define OPT_OPTIMIZE (1<<0)	/* Optimize HDBF code before interpreting */
 #define OPT_HELP (1<<1)		/* Display help message (do not interpret) */
 #define OPT_VER (1<<2)		/* Show version number */
 #define OPT_DEBUG (1<<3)	/* Allow debug commands */
@@ -27,7 +26,6 @@
 	/* Get option from option code */
 #define GET_OPTION(n) (\
 	n=='h'?OPT_HELP:\
-	n=='o'?OPT_OPTIMIZE:\
 	n=='v'?OPT_VER:\
 	n=='d'?OPT_DEBUG:\
 	n=='i'?OPT_STRING:\
