@@ -17,12 +17,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "interpret.h"
-#include "optimize.h"
 #include "options.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define DBFI_VERSION "Dagan's Brainfuck Interpreter 0.0.9"
+#define DBFI_VERSION "Dagan's Brainfuck Interpreter 1.0.0"
 #define DBFI_USAGE "Usage: bf [options] [filename | -i cmd]\n"
 
 int main(int argc, char *argv[])
@@ -97,7 +96,6 @@ int main(int argc, char *argv[])
 		       "\t-d\tAllow debugging commands\n"
 		       "\t-h\tPrint help message\n"
 		       "\t-i cmd\tPass string as code\n"
-		       "\t-o\tOptimize before running\n"
 		       "\t-t\tDisplay run time of program\n"
 		       "\t-v\tDisplay version number\n");
 	} else if (HAS_OPTION(OPT_VER)) {
@@ -106,10 +104,7 @@ int main(int argc, char *argv[])
 	} else if (HAS_OPTION(OPT_STRING)) {
 		/* Interpret from argument */
 		if (filename_set) {
-			if (HAS_OPTION(OPT_OPTIMIZE)) {
-				optimize(filename, options);
-			}
-			interpret(filename, options);
+			run(filename, options);
 		} else {
 			fprintf(stderr, "bf: no command\n" DBFI_USAGE);
 			return EXIT_FAILURE;
@@ -138,10 +133,7 @@ int main(int argc, char *argv[])
 		fread(fp_contents, 1, fp_size, fp);
 		fclose(fp);
 		/* Interpret source code */
-		if (HAS_OPTION(OPT_OPTIMIZE)) {
-			optimize(fp_contents, options);
-		}
-		interpret(fp_contents, options);
+		run(fp_contents, options);
 		/* Free everything */
 		free(fp_contents);
 	} else {
