@@ -19,11 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "interpret.h"
 #include "optimize.h"
 #include "options.h"
-#include "compile.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define DBFI_VERSION "Dagan's Brainfuck Interpreter 0.0.9"
+#define DBFI_VERSION "Dagan's Brainfuck Interpreter 1.0.0"
 #define DBFI_USAGE "Usage: bf [options] [filename | -i cmd]\n"
 
 int main(int argc, char *argv[])
@@ -142,7 +141,7 @@ int main(int argc, char *argv[])
 		if (HAS_OPTION(OPT_OPTIMIZE)) {
 			optimize(fp_contents, options);
 		}
-		interpret(fp_contents, options);
+		run(fp_contents, options);
 		/* Free everything */
 		free(fp_contents);
 	} else {
