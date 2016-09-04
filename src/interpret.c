@@ -10,7 +10,7 @@
 #define BF_GOTO 'g'
 #define BF_PUT '.'
 #define BF_GET ','
-#define BF_DEBUG '#'
+#define BF_DEBUG '~'
 #define BF_END 'E'
 struct BFCommand {
 	char ctype;		//command type
@@ -18,11 +18,12 @@ struct BFCommand {
 };
 /* Convert code into list of commands 
  * The idea here is that this is faster to run
- * than interpreting the ['s and ]'s as you go along*/
+* than interpreting the ['s and ]'s as you go along*/
 static void compile(struct BFCommand *commands, const char *code)
 {
 	int count = 0;		/* How many command objects have we put in the 'commands' list */
-	int skip_queue[30000];
+	//int skip_max = 100;
+	int skip_queue[30000];	// = calloc(skip_max, sizeof(int));
 	int skips = 0;		/* Where we are in the skip queue */
 	for (int i = 0; code[i] != '\0'; i++) {
 		if (code[i] == '[') {
@@ -31,6 +32,20 @@ static void compile(struct BFCommand *commands, const char *code)
 			skip_queue[skips] = count;
 			count++;
 			skips++;
+			/* Reallocate skip_queue *//*
+			   if(skips>=skip_max){
+			   int* buffer=calloc(skip_max, sizeof(int));
+			   for(int j=0;j<skip_max;j++){
+			   buffer[j] = skip_queue[j];
+			   }
+			   free(skip_queue);
+			   skip_queue = calloc(skip_max+1, sizeof(int));
+			   for(int j=0;j<skip_max;j++){
+			   skip_queue[j] = buffer[j];
+			   }
+			   free(buffer);
+			   skip_max++;
+			   } */
 		} else if (code[i] == ']') {
 			/* Record where a ']'would go back to */
 			skips--;
@@ -87,7 +102,7 @@ void run(const char *code, int options)
 	compile(commands, code);
 
 	int tape_size = 1;
-	char* tape = calloc(tape_size, sizeof(char));
+	char *tape = calloc(tape_size, sizeof(char));
 	int pointer = 0;
 
 	/* Set up options */
@@ -101,17 +116,32 @@ void run(const char *code, int options)
 		switch (commands[i].ctype) {
 		case BF_SHIFT:
 			pointer += commands[i].value;
+			/* Check for pointer errors */
+			if (pointer < 0) {
+				fprintf(stderr,
+					"runtime error: negative pointer\n");
+				exit(1);
+			}
+
 			/* Reallocate tape */
-			if(pointer>=tape_size){
-				char* buffer=calloc(tape_size+(1+pointer-tape_size),sizeof(char));
-				for(int j=0;j<tape_size;j++){
+			else if (pointer >= tape_size) {
+				char *buffer =
+				    malloc(tape_size +
+					   (1 + pointer - tape_size),
+					   sizeof(char));
+				for (int j = 0; j < tape_size; j++) {
 					buffer[j] = tape[j];
 				}
-				tape = calloc(tape_size+(1+pointer-tape_size), sizeof(char));
-				for(int j=0;j<tape_size;j++){
+				free(tape);
+				tape =
+				    calloc(tape_size +
+					   (1 + pointer - tape_size),
+					   sizeof(char));
+				for (int j = 0; j < tape_size; j++) {
 					tape[j] = buffer[j];
 				}
-				tape_size+=1+pointer-tape_size;
+				tape_size += 1 + pointer - tape_size;
+				free(buffer);
 			}
 			break;
 		case BF_ADD:
