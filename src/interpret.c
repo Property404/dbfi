@@ -126,7 +126,7 @@ void run(const char *code, int options)
 			/* Reallocate tape */
 			else if (pointer >= tape_size) {
 				char *buffer =
-				    malloc(tape_size +
+				    calloc(tape_size +
 					   (1 + pointer - tape_size),
 					   sizeof(char));
 				for (int j = 0; j < tape_size; j++) {
