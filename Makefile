@@ -15,7 +15,7 @@ EXECUTABLE_NAME = bf
 # Compiler flags
 CC = cc # More portable than using 'gcc,' but with risk
 	# of calling wrong compiler
-CFLAGS = -Wall -Wextra -std=gnu99 -O2 -pedantic
+CFLAGS = -Wall -Wextra -std=gnu99 -O3 -s -pedantic
 FILES = interpret.c main.c
 SOURCES = $(FILES:%.c=$(SRC_DIR)/%.c)
 

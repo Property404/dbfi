@@ -22,8 +22,8 @@ struct BFCommand {
 static void compile(struct BFCommand *commands, const char *code)
 {
 	int count = 0;		/* How many command objects have we put in the 'commands' list */
-	//int skip_max = 100;
-	int skip_queue[30000];	// = calloc(skip_max, sizeof(int));
+	int skip_max = 10;
+	int *skip_queue = calloc(skip_max, sizeof(int));
 	int skips = 0;		/* Where we are in the skip queue */
 	for (int i = 0; code[i] != '\0'; i++) {
 		if (code[i] == '[') {
@@ -32,20 +32,22 @@ static void compile(struct BFCommand *commands, const char *code)
 			skip_queue[skips] = count;
 			count++;
 			skips++;
-			/* Reallocate skip_queue *//*
-			   if(skips>=skip_max){
-			   int* buffer=calloc(skip_max, sizeof(int));
-			   for(int j=0;j<skip_max;j++){
-			   buffer[j] = skip_queue[j];
-			   }
-			   free(skip_queue);
-			   skip_queue = calloc(skip_max+1, sizeof(int));
-			   for(int j=0;j<skip_max;j++){
-			   skip_queue[j] = buffer[j];
-			   }
-			   free(buffer);
-			   skip_max++;
-			   } */
+			/*Reallocate skip_queue */
+			if (skips >= skip_max) {
+				int *buffer =
+				    calloc(skip_max, sizeof(int));
+				for (int j = 0; j < skip_max; j++) {
+					buffer[j] = skip_queue[j];
+				}
+				free(skip_queue);
+				skip_queue =
+				    calloc(skip_max + 1, sizeof(int));
+				for (int j = 0; j < skip_max; j++) {
+					skip_queue[j] = buffer[j];
+				}
+				free(buffer);
+				skip_max++;
+			}
 		} else if (code[i] == ']') {
 			/* Record where a ']'would go back to */
 			skips--;
@@ -91,6 +93,7 @@ static void compile(struct BFCommand *commands, const char *code)
 	}
 	/* This object tells interpreter to stop running */
 	commands[count].ctype = BF_END;
+	free(skip_queue);
 }
 
 /* Interpret commands */
