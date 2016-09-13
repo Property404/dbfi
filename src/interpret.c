@@ -4,6 +4,11 @@
 #include "interpret.h"
 #include "timer.h"
 #include "options.h"
+
+/* Brainfuck cell */
+#define CELL unsigned char
+
+/* ctype codes */
 #define BF_SHIFT '>'
 #define BF_ADD '+'
 #define BF_SKIP 's'
@@ -52,7 +57,7 @@ static void tokenize(struct Token *commands, const char *code)
 			/* Record where a ']'would go back to */
 			skips--;
 			commands[count].ctype = BF_GOTO;
-			commands[count].value = skip_queue[skips];
+			commands[count].value = skip_queue[skips] - 1;
 			commands[skip_queue[skips]].value = count;
 			count++;
 		} else if (code[i] == '<' || code[i] == '>') {
@@ -105,7 +110,7 @@ void run(const char *code, int options)
 	tokenize(commands, code);
 
 	int tape_size = 1;
-	char *tape = calloc(tape_size, sizeof(char));
+	CELL *tape = calloc(tape_size, sizeof(CELL));
 	int pointer = 0;
 
 	/* Set up options */
@@ -128,10 +133,10 @@ void run(const char *code, int options)
 
 			/* Reallocate tape */
 			else if (pointer >= tape_size) {
-				char *buffer =
+				CELL *buffer =
 				    calloc(tape_size +
 					   (1 + pointer - tape_size),
-					   sizeof(char));
+					   sizeof(CELL));
 				for (int j = 0; j < tape_size; j++) {
 					buffer[j] = tape[j];
 				}
@@ -139,7 +144,7 @@ void run(const char *code, int options)
 				tape =
 				    calloc(tape_size +
 					   (1 + pointer - tape_size),
-					   sizeof(char));
+					   sizeof(CELL));
 				for (int j = 0; j < tape_size; j++) {
 					tape[j] = buffer[j];
 				}
@@ -159,10 +164,13 @@ void run(const char *code, int options)
 		case BF_SKIP:
 			if (tape[pointer] == 0) {
 				i = commands[i].value;
+			}else if (commands[i+1].ctype==BF_ADD && commands[i+2].ctype==BF_GOTO){
+				tape[pointer] = 0;
+				i = commands[i].value;
 			}
 			break;
 		case BF_GOTO:
-			i = commands[i].value - 1;
+			i = commands[i].value;
 			break;
 		case BF_DEBUG:
 			if (HAS_OPTION(OPT_DEBUG)) {
