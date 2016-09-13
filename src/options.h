@@ -7,11 +7,8 @@
 	/* return 'n' from options if exists */
 #define HAS_OPTION(n) ((int)((*__option_var__)&n))
 
-	/* Remove 'n' from options */
-#define RM_OPTION(n) ((HAS_OPTION(n)?*__option_var__^=n:*__option_var__))
-
 	/* Add 'n' to options */
-#define ADD_OPTION(n) ((n>0?*__option_var__|=n:RM_OPTION(-n)));
+#define ADD_OPTION(n) (*__option_var__|=n);
 
 
 	/* List of possible options 

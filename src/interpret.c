@@ -12,17 +12,17 @@
 #define BF_GET ','
 #define BF_DEBUG '~'
 #define BF_END 'E'
-struct BFCommand {
+struct Token {
 	char ctype;		//command type
 	int value;
 };
 /* Convert code into list of commands 
  * The idea here is that this is faster to run
 * than interpreting the ['s and ]'s as you go along*/
-static void compile(struct BFCommand *commands, const char *code)
+static void tokenize(struct Token *commands, const char *code)
 {
 	int count = 0;		/* How many command objects have we put in the 'commands' list */
-	int skip_max = 10;
+	int skip_max = 10;	/* Size of skip queque */
 	int *skip_queue = calloc(skip_max, sizeof(int));
 	int skips = 0;		/* Where we are in the skip queue */
 	for (int i = 0; code[i] != '\0'; i++) {
@@ -100,9 +100,9 @@ static void compile(struct BFCommand *commands, const char *code)
 void run(const char *code, int options)
 {
 	/* Create list of commands from code */
-	struct BFCommand *commands;
-	commands = malloc(sizeof(struct BFCommand) * (strlen(code) + 2));
-	compile(commands, code);
+	struct Token *commands;
+	commands = malloc(sizeof(struct Token) * (strlen(code) + 2));
+	tokenize(commands, code);
 
 	int tape_size = 1;
 	char *tape = calloc(tape_size, sizeof(char));
@@ -123,7 +123,7 @@ void run(const char *code, int options)
 			if (pointer < 0) {
 				fprintf(stderr,
 					"runtime error: negative pointer\n");
-				exit(1);
+				exit(EXIT_FAILURE);
 			}
 
 			/* Reallocate tape */
