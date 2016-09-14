@@ -21,8 +21,13 @@
 		clock_gettime(CLOCK_MONOTONIC_RAW, &KTIMER_start);
 #define STOP_TIMER clock_gettime(CLOCK_MONOTONIC_RAW, &KTIMER_stop);
 #define PRINT_TIMER printf("runtime: %lf\n", (KTIMER_stop.tv_sec-KTIMER_start.tv_sec)+(KTIMER_stop.tv_nsec - KTIMER_start.tv_nsec)/1E9);
-#else
 /* Using whole seconds */
+#elif __WIN32__
+#include <sys\timeb.h>
+#define START_TIMER struct timeb KTIMER_start,KTIMER_end;ftime(&KTIMER_start);
+#define STOP_TIMER ftime(&KTIMER_end);
+#define PRINT_TIMER printf("runtime: %lf\n", ((double)(1000*(KTIMER_end.time-KTIMER_start.time)+(KTIMER_end.millitm-KTIMER_start.millitm)))/1000);
+#else
 #define START_TIMER time_t KTIMER_start = time(NULL);time_t KTIMER_stop;
 #define STOP_TIMER  KTIMER_stop = time(NULL);
 #define PRINT_TIMER printf("runtime: %ld\n", KTIMER_stop - KTIMER_start);
