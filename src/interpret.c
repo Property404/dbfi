@@ -78,13 +78,19 @@ static void tokenize(struct Token *commands, const char *code)
 				    code[i + 1] == '-' ? -1 : 1;
 				i++;
 			}
-			count++;
+			/* Only add code if it's not dead */
+			if(commands[count].value!=0){
+				count++;
+			}
 		} else if (code[i] == '.') {
 			/* Note: Value doesn't do anything. Consecutive '.'
 			 *                      are just consecutive commands. I don't think this has a performance hit */
 			commands[count].ctype = BF_PUT;
 			commands[count].value = 1;
-			count++;
+			/* Only add code if it's not dead */
+			if(commands[count].value!=0){
+				count++;
+			}
 		} else if (code[i] == ',') {
 			/* See above */
 			commands[count].ctype = BF_GET;
