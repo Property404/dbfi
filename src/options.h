@@ -19,6 +19,7 @@
 #define OPT_DEBUG (1<<3)	/* Allow debug commands */
 #define OPT_STRING (1<<4)	/* Lets argument string run as code instead of file */
 #define OPT_TIMER (1<<5)	/* Displays the run time of a program */
+#define OPT_OPTIMIZE (1<<6)	/* Run optimizer */
 
 	/* Get option from option code */
 #define GET_OPTION(n) (\
@@ -27,5 +28,6 @@
 	n=='d'?OPT_DEBUG:\
 	n=='i'?OPT_STRING:\
 	n=='t'?OPT_TIMER:\
+	n=='o'?OPT_OPTIMIZE:\
 	OPT_NONE)
 #endif

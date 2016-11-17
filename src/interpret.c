@@ -70,7 +70,7 @@ static void tokenize(struct Token *commands, const char *code)
 				i++;
 			}
 			/* Only add code if it's not dead */
-			if(commands[count].value!=0){
+			if (commands[count].value != 0) {
 				count++;
 			}
 		} else if (code[i] == '+' || code[i] == '-') {
@@ -82,7 +82,7 @@ static void tokenize(struct Token *commands, const char *code)
 				i++;
 			}
 			/* Only add code if it's not dead */
-			if(commands[count].value!=0){
+			if (commands[count].value != 0) {
 				count++;
 			}
 		} else if (code[i] == '.') {
@@ -168,7 +168,8 @@ void run(const char *code, int options)
 		case BF_SKIP:
 			if (tape[pointer] == 0) {
 				i = commands[i].value;
-			}else if (commands[i+1].ctype==BF_ADD && commands[i+2].ctype==BF_GOTO){
+			} else if (commands[i + 1].ctype == BF_ADD
+				   && commands[i + 2].ctype == BF_GOTO) {
 				tape[pointer] = 0;
 				i = commands[i].value;
 			}
