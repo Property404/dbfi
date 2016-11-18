@@ -179,7 +179,7 @@ void run(const char *code, int options)
 			break;
 		case BF_DEBUG:
 			if (HAS_OPTION(OPT_DEBUG)) {
-				printf("{%d}", tape[pointer]);
+				printf("{%d=>%d}", pointer, tape[pointer]);
 			}
 		}
 		//printf("{%c:%i}\n",commands[i].ctype,commands[i].value);

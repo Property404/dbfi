@@ -5,7 +5,7 @@
 
 #define OPPOSITE(n) (n=='+'?'-':n=='-'?'+':n=='<'?'>':n=='>'?'<':0)
 #define VALID_CHAR(n) (n=='+'||n=='-'||n=='<'||n=='>'||n=='['||n==']'\
-						|| n==',' || n=='.' || (HAS_OPTION(OPT_DEBUG) && (n=='#' || n=='?')))
+						|| n==',' || n=='.' || (HAS_OPTION(OPT_DEBUG) && (n=='~')))
 void optimize(char *code, int options)
 {
 	unsigned int i, j;
