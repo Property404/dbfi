@@ -40,7 +40,3 @@ void optimize(char *code, int options)
 		optimize(code, options);
 	}
 }
-
-/* Remove definitions */
-#undef OPPOSITE
-#undef VALID_CHAR
