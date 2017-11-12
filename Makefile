@@ -1,4 +1,3 @@
-SHELL = /bin/sh
 
 # Where the files are
 SRC_DIR = ./src/

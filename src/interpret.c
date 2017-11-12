@@ -105,6 +105,36 @@ static void tokenize(struct Token *commands, const char *code)
 	free(skip_queue);
 }
 
+static inline void shift (unsigned char** tape, int* tape_size, const int pointer ){
+	/* Check for pointer errors */
+	if (pointer < 0) {
+		fprintf(stderr,
+			"runtime error: negative pointer\n");
+		exit(EXIT_FAILURE);
+	}
+
+	/* Reallocate tape */
+	else if (pointer >= *tape_size) {
+		CELL *buffer =
+		    calloc(*tape_size +
+			   (1 + pointer - *tape_size),
+			   sizeof(CELL));
+		for (int j = 0; j < *tape_size; j++) {
+			buffer[j] = (*tape)[j];
+		}
+		free(*tape);
+		*tape =
+		    calloc(*tape_size +
+			   (1 + pointer - *tape_size),
+			   sizeof(CELL));
+		for (int j = 0; j < *tape_size; j++) {
+			(*tape)[j] = (buffer)[j];
+		}
+		*tape_size += 1 + pointer - *tape_size;
+		free(buffer);
+	}
+}
+
 /* Interpret commands */
 void run(const char *code, int options)
 {
@@ -113,7 +143,7 @@ void run(const char *code, int options)
 	commands = malloc(sizeof(struct Token) * (strlen(code) + 2));
 	tokenize(commands, code);
 
-	int tape_size = 1;
+	int tape_size = 10;
 	CELL *tape = calloc(tape_size, sizeof(CELL));
 	int pointer = 0;
 
@@ -128,33 +158,7 @@ void run(const char *code, int options)
 		switch (commands[i].ctype) {
 		case BF_SHIFT:
 			pointer += commands[i].value;
-			/* Check for pointer errors */
-			if (pointer < 0) {
-				fprintf(stderr,
-					"runtime error: negative pointer\n");
-				exit(EXIT_FAILURE);
-			}
-
-			/* Reallocate tape */
-			else if (pointer >= tape_size) {
-				CELL *buffer =
-				    calloc(tape_size +
-					   (1 + pointer - tape_size),
-					   sizeof(CELL));
-				for (int j = 0; j < tape_size; j++) {
-					buffer[j] = tape[j];
-				}
-				free(tape);
-				tape =
-				    calloc(tape_size +
-					   (1 + pointer - tape_size),
-					   sizeof(CELL));
-				for (int j = 0; j < tape_size; j++) {
-					tape[j] = buffer[j];
-				}
-				tape_size += 1 + pointer - tape_size;
-				free(buffer);
-			}
+			shift(&tape, &tape_size, pointer);
 			break;
 		case BF_ADD:
 			tape[pointer] += commands[i].value;
@@ -168,10 +172,28 @@ void run(const char *code, int options)
 		case BF_SKIP:
 			if (tape[pointer] == 0) {
 				i = commands[i].value;
-			} else if (commands[i + 1].ctype == BF_ADD
-				   && commands[i + 2].ctype == BF_GOTO) {
-				tape[pointer] = 0;
-				i = commands[i].value;
+			} else if (commands[i + 1].ctype == BF_ADD){
+				if(commands[i + 2].ctype == BF_GOTO) {
+					tape[pointer] = 0;
+					i = commands[i].value;
+				}else if(commands [i+2].ctype == BF_SHIFT
+						&& commands[i+3].ctype == BF_ADD
+						&& commands[i+4].ctype == BF_SHIFT
+						&& commands[i+5].ctype == BF_GOTO
+						&& commands[i+4].value == - commands[i+2].value
+						&& commands[i+1].value < 0){
+
+						const int inc1 = - commands[i+1].value;
+						const int inc2 = commands[i+3].value;
+						const int shift1 = commands[i+2].value;
+
+						shift(&tape, &tape_size, pointer+shift1);
+
+						tape[pointer + shift1] += (tape[pointer]/inc1) * inc2;
+						tape[pointer] = 0 - (inc1 - tape[pointer]%inc1)%inc1;
+						i = commands[i].value;
+					
+				}
 			}
 			break;
 		case BF_GOTO:
@@ -182,7 +204,6 @@ void run(const char *code, int options)
 				printf("{%d=>%d}", pointer, tape[pointer]);
 			}
 		}
-		//printf("{%c:%i}\n",commands[i].ctype,commands[i].value);
 	}
 
 	if (HAS_OPTION(OPT_TIMER)) {
