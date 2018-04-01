@@ -4,6 +4,7 @@
 !*.md
 !*.bf
 !*.hdbf
+!.travis.yml
 !.gitignore
 !Makefile
 !*/
