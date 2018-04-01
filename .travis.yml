@@ -24,4 +24,4 @@ install:
 # Build steps
 script:
   - make
-  - ./bf examples/hello.bf
+  - ./bf examples/hello.b

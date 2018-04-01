@@ -14,7 +14,7 @@ DBFI is a Brainfuck interpreter based off my [Hyper-Dimensional Brainfuck](https
     cd dbfi
     make;sudo make install
     # test
-    bf examples/LostKingdom.bf
+    bf examples/LostKingdom.b
 
 ## Possible future features:  
 Forbidding wrapping  
