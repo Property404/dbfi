@@ -1,3 +1,5 @@
+#ifndef HEADER_TIMER
+#define HEADER_TIMER 1
 #include <time.h>
 
 /*Timer macros. Use as such:
@@ -34,3 +36,4 @@
 #endif
 
 #undef CAN_USE_NS
+#endif
