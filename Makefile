@@ -23,7 +23,7 @@ OBJECTS = $(FILES:%.c=$(SRC_DIR)/%.o)
 bf: $(OBJECTS)
 	$(CC) -o $(EXECUTABLE_NAME) $(OBJECTS) $(CFLAGS)
 %.o: %.c
-	$(CC) $(CCFLAGS) -c $(@:.o=.c) -o $@
+	$(CC) $(CFLAGS) -c $(@:.o=.c) -o $@
 clean:
 	rm -f $(EXECUTABLE_NAME)
 	rm -f $(OBJECTS)
