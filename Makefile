@@ -17,13 +17,16 @@ CC = cc # More portable than using 'gcc,' but with risk
 	# of calling wrong compiler
 CFLAGS = -Wall -Wextra -std=gnu99 -O3 -s -pedantic
 FILES = interpret.c main.c optimize.c
-SOURCES = $(FILES:%.c=$(SRC_DIR)/%.c)
+OBJECTS = $(FILES:%.c=$(SRC_DIR)/%.o)
 
 # Build recipe
-bf:
-	$(CC) -o $(EXECUTABLE_NAME) $(SOURCES) $(CFLAGS)
+bf: $(OBJECTS)
+	$(CC) -o $(EXECUTABLE_NAME) $(OBJECTS) $(CFLAGS)
+%.o: %.c
+	$(CC) $(CCFLAGS) -c $(@:.o=.c) -o $@
 clean:
 	rm -f $(EXECUTABLE_NAME)
+	rm -f $(OBJECTS)
 install:
 	$(INSTALL_COMMAND) $(EXECUTABLE_NAME) $(INSTALL_DIR)
 uninstall:
